@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xakj.platform.platform.mapper.UserTwoMapper">
+  <resultMap id="BaseResultMap" type="com.xakj.platform.platform.model.User">
+
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="userName" jdbcType="VARCHAR" property="userName" />
+    <result column="passWord" jdbcType="VARCHAR" property="passWord" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="addDate" jdbcType="TIMESTAMP" property="addDate" />
+    <result column="CompanyId" jdbcType="VARCHAR" property="companyId" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="actualName" jdbcType="VARCHAR" property="actualName" />
+    <result column="role" jdbcType="VARCHAR" property="role" />
+    <result column="insuranceCompanyName" jdbcType="VARCHAR" property="insuranceCompanyName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+
+    id, userName, `passWord`, phone, addDate, CompanyId, `status`, actualName, `role`, 
+    insuranceCompanyName
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where id = #{id,jdbcType=VARCHAR} or  userName=#{userName,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+
+    delete from user
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xakj.platform.platform.model.User">
+
+    insert into user (id, userName, `passWord`, 
+      phone, addDate, CompanyId, 
+      `status`, actualName, `role`, 
+      insuranceCompanyName)
+    values (#{id,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{passWord,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{addDate,jdbcType=TIMESTAMP}, #{companyId,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{actualName,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, 
+      #{insuranceCompanyName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xakj.platform.platform.model.User">
+
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userName != null">
+        userName,
+      </if>
+      <if test="passWord != null">
+        `passWord`,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="addDate != null">
+        addDate,
+      </if>
+      <if test="companyId != null">
+        CompanyId,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="actualName != null">
+        actualName,
+      </if>
+      <if test="role != null">
+        `role`,
+      </if>
+      <if test="insuranceCompanyName != null">
+        insuranceCompanyName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="passWord != null">
+        #{passWord,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="addDate != null">
+        #{addDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="actualName != null">
+        #{actualName,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="insuranceCompanyName != null">
+        #{insuranceCompanyName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xakj.platform.platform.model.User">
+
+    update user
+    <set>
+      <if test="userName != null">
+        userName = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="passWord != null">
+        `passWord` = #{passWord,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="addDate != null">
+        addDate = #{addDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyId != null">
+        CompanyId = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="actualName != null">
+        actualName = #{actualName,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        `role` = #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="insuranceCompanyName != null">
+        insuranceCompanyName = #{insuranceCompanyName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xakj.platform.platform.model.User">
+
+    update user
+    set userName = #{userName,jdbcType=VARCHAR},
+      `passWord` = #{passWord,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      addDate = #{addDate,jdbcType=TIMESTAMP},
+      CompanyId = #{companyId,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=VARCHAR},
+      actualName = #{actualName,jdbcType=VARCHAR},
+      `role` = #{role,jdbcType=VARCHAR},
+      insuranceCompanyName = #{insuranceCompanyName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xakj.platform.platform.mapper.UserrecordMapper">
+  <resultMap id="BaseResultMap" type="com.xakj.platform.platform.model.Userrecord">
+
+    <id column="userRecordId" jdbcType="VARCHAR" property="userRecordId" />
+    <result column="userId" jdbcType="VARCHAR" property="userId" />
+    <result column="userName" jdbcType="VARCHAR" property="userName" />
+    <result column="actualName" jdbcType="VARCHAR" property="actualName" />
+    <result column="applyDate" jdbcType="TIMESTAMP" property="applyDate" />
+    <result column="addDate" jdbcType="TIMESTAMP" property="addDate" />
+    <result column="applyRecordId" jdbcType="VARCHAR" property="applyRecordId" />
+    <result column="insuranceCompanyId" jdbcType="VARCHAR" property="insuranceCompanyId" />
+    <result column="hospitalId" jdbcType="VARCHAR" property="hospitalId" />
+    <result column="hospitalName" jdbcType="VARCHAR" property="hospitalName" />
+    <result column="isData" jdbcType="VARCHAR" property="isData" />
+    <result column="processingTime" jdbcType="VARCHAR" property="processingTime" />
+    <result column="role" jdbcType="VARCHAR" property="role" />
+    <result column="insuranceCompanyName" jdbcType="VARCHAR" property="insuranceCompanyName" />
+    <result column="patientId" jdbcType="VARCHAR" property="patientId" />
+    <result column="patientName" jdbcType="VARCHAR" property="patientName" />
+    <result column="customerPhone" jdbcType="VARCHAR" property="customerPhone" />
+  </resultMap>
+  <sql id="Base_Column_List">
+
+    userRecordId, userId, userName, actualName, applyDate, addDate, applyRecordId, insuranceCompanyId,
+    hospitalId, hospitalName, isData, processingTime, `role`, insuranceCompanyName, patientId, 
+    patientName, customerPhone
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+
+    select 
+   <!-- <include refid="Base_Column_List" /> ,DATE_FORMAT(applyDate,"%Y-%m-%d %H:%i") AS applyDate-->
+    DATE_FORMAT(applyDate,"%Y-%m-%d %H:%i") AS applyDate
+
+    from userrecord
+    where userRecordId = #{userRecordId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectInsuranceCompany" parameterType="com.xakj.platform.platform.model.vo.UserrecordReq" resultMap="BaseResultMap">
+
+    select
+
+    <include refid="Base_Column_List" />
+    from userrecord
+    where 1=1
+    <if test="insuranceCompanyName != null and insuranceCompanyName != ''" >
+      and  insuranceCompanyName = #{insuranceCompanyName,jdbcType=VARCHAR}
+    </if>
+
+    <if test="beginTime != null and beginTime != ''">
+      and applyDate >=#{beginTime,jdbcType=VARCHAR}
+    </if>
+    <if test="endTime != null and endTime != ''">
+      and <![CDATA[ applyDate <=#{endTime,jdbcType=VARCHAR}]]>
+    </if>
+  </select>
+
+  <select id="selectCount" parameterType="com.xakj.platform.platform.model.vo.UserrecordReq" resultType="java.lang.String">
+
+    select COUNT(1)
+    from userrecord
+    where  userId = #{userId,jdbcType=VARCHAR}
+
+  </select>
+
+  <select id="selectPocessingTime" parameterType="com.xakj.platform.platform.model.vo.UserrecordReq" resultType="long">
+
+      SELECT SUM(A.processingTime)/(SELECT COUNT(1) from
+
+      userrecord b WHERE b.userId = #{userId,jdbcType=VARCHAR}) FROM userrecord A
+      WHERE A.userId = #{userId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectCountAll" parameterType="com.xakj.platform.platform.model.vo.UserrecordReq" resultType="java.lang.String">
+
+    SELECT COUNT(1) from
+
+    userrecord b WHERE B. insuranceCompanyId = #{insuranceCompanyId,jdbcType=VARCHAR}
+    <if test="beginTime != null and beginTime != ''">
+      and addDate >=#{beginTime,jdbcType=VARCHAR}
+    </if>
+    <if test="endTime != null and endTime != ''">
+      and <![CDATA[ addDate <=#{endTime,jdbcType=VARCHAR}]]>
+    </if>
+
+
+  </select>
+
+  <select id="selectPocessingTimeAll" parameterType="com.xakj.platform.platform.model.vo.UserrecordReq" resultType="long">
+
+      SELECT SUM(A.processingTime)/(SELECT COUNT(1) from
+
+      userrecord b WHERE b.insuranceCompanyId = #{insuranceCompanyId,jdbcType=VARCHAR}
+        <if test="beginTime != null and beginTime != ''">
+          and addDate >=#{beginTime,jdbcType=VARCHAR}
+        </if>
+        <if test="endTime != null and endTime != ''">
+          and <![CDATA[ addDate <=#{endTime,jdbcType=VARCHAR}]]>
+        </if>
+      ) FROM userrecord A
+      WHERE A.insuranceCompanyId = #{insuranceCompanyId,jdbcType=VARCHAR}
+
+      <if test="beginTime != null and beginTime != ''">
+        and addDate >=#{beginTime,jdbcType=VARCHAR}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        and <![CDATA[ addDate <=#{endTime,jdbcType=VARCHAR}]]>
+      </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+
+    delete from userrecord
+    where userRecordId = #{userRecordId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xakj.platform.platform.model.Userrecord">
+
+    insert into userrecord (userRecordId, userId, userName, 
+      actualName, applyDate, addDate, 
+      applyRecordId, insuranceCompanyId, hospitalId, 
+      hospitalName, isData, processingTime, 
+      `role`, insuranceCompanyName, patientId, 
+      patientName)
+    values (#{userRecordId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{actualName,jdbcType=VARCHAR}, #{applyDate,jdbcType=TIMESTAMP}, #{addDate,jdbcType=TIMESTAMP}, 
+      #{applyRecordId,jdbcType=VARCHAR}, #{insuranceCompanyId,jdbcType=VARCHAR}, #{hospitalId,jdbcType=VARCHAR}, 
+      #{hospitalName,jdbcType=VARCHAR}, #{isData,jdbcType=VARCHAR}, #{processingTime,jdbcType=VARCHAR}, 
+      #{role,jdbcType=VARCHAR}, #{insuranceCompanyName,jdbcType=VARCHAR}, #{patientId,jdbcType=VARCHAR}, 
+      #{patientName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xakj.platform.platform.model.Userrecord">
+
+    insert into userrecord
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userRecordId != null">
+        userRecordId,
+      </if>
+      <if test="userId != null">
+        userId,
+      </if>
+      <if test="userName != null">
+        userName,
+      </if>
+      <if test="actualName != null">
+        actualName,
+      </if>
+      <if test="applyDate != null">
+        applyDate,
+      </if>
+      <if test="addDate != null">
+        addDate,
+      </if>
+      <if test="applyRecordId != null">
+        applyRecordId,
+      </if>
+      <if test="insuranceCompanyId != null">
+        insuranceCompanyId,
+      </if>
+      <if test="hospitalId != null">
+        hospitalId,
+      </if>
+      <if test="hospitalName != null">
+        hospitalName,
+      </if>
+      <if test="isData != null">
+        isData,
+      </if>
+      <if test="processingTime != null">
+        processingTime,
+      </if>
+      <if test="role != null">
+        `role`,
+      </if>
+      <if test="insuranceCompanyName != null">
+        insuranceCompanyName,
+      </if>
+      <if test="patientId != null">
+        patientId,
+      </if>
+      <if test="patientName != null">
+        patientName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userRecordId != null">
+        #{userRecordId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="actualName != null">
+        #{actualName,jdbcType=VARCHAR},
+      </if>
+      <if test="applyDate != null">
+        #{applyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addDate != null">
+        #{addDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyRecordId != null">
+        #{applyRecordId,jdbcType=VARCHAR},
+      </if>
+      <if test="insuranceCompanyId != null">
+        #{insuranceCompanyId,jdbcType=VARCHAR},
+      </if>
+      <if test="hospitalId != null">
+        #{hospitalId,jdbcType=VARCHAR},
+      </if>
+      <if test="hospitalName != null">
+        #{hospitalName,jdbcType=VARCHAR},
+      </if>
+      <if test="isData != null">
+        #{isData,jdbcType=VARCHAR},
+      </if>
+      <if test="processingTime != null">
+        #{processingTime,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="insuranceCompanyName != null">
+        #{insuranceCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="patientId != null">
+        #{patientId,jdbcType=VARCHAR},
+      </if>
+      <if test="patientName != null">
+        #{patientName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xakj.platform.platform.model.Userrecord">
+
+    update userrecord
+    <set>
+      <if test="userId != null">
+        userId = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        userName = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="actualName != null">
+        actualName = #{actualName,jdbcType=VARCHAR},
+      </if>
+      <if test="applyDate != null">
+        applyDate = #{applyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addDate != null">
+        addDate = #{addDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyRecordId != null">
+        applyRecordId = #{applyRecordId,jdbcType=VARCHAR},
+      </if>
+      <if test="insuranceCompanyId != null">
+        insuranceCompanyId = #{insuranceCompanyId,jdbcType=VARCHAR},
+      </if>
+      <if test="hospitalId != null">
+        hospitalId = #{hospitalId,jdbcType=VARCHAR},
+      </if>
+      <if test="hospitalName != null">
+        hospitalName = #{hospitalName,jdbcType=VARCHAR},
+      </if>
+      <if test="isData != null">
+        isData = #{isData,jdbcType=VARCHAR},
+      </if>
+      <if test="processingTime != null">
+        processingTime = #{processingTime,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        `role` = #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="insuranceCompanyName != null">
+        insuranceCompanyName = #{insuranceCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="patientId != null">
+        patientId = #{patientId,jdbcType=VARCHAR},
+      </if>
+      <if test="patientName != null">
+        patientName = #{patientName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where userRecordId = #{userRecordId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xakj.platform.platform.model.Userrecord">
+
+    update userrecord
+    set userId = #{userId,jdbcType=VARCHAR},
+      userName = #{userName,jdbcType=VARCHAR},
+      actualName = #{actualName,jdbcType=VARCHAR},
+      applyDate = #{applyDate,jdbcType=TIMESTAMP},
+      addDate = #{addDate,jdbcType=TIMESTAMP},
+      applyRecordId = #{applyRecordId,jdbcType=VARCHAR},
+      insuranceCompanyId = #{insuranceCompanyId,jdbcType=VARCHAR},
+      hospitalId = #{hospitalId,jdbcType=VARCHAR},
+      hospitalName = #{hospitalName,jdbcType=VARCHAR},
+      isData = #{isData,jdbcType=VARCHAR},
+      processingTime = #{processingTime,jdbcType=VARCHAR},
+      `role` = #{role,jdbcType=VARCHAR},
+      insuranceCompanyName = #{insuranceCompanyName,jdbcType=VARCHAR},
+      patientId = #{patientId,jdbcType=VARCHAR},
+      patientName = #{patientName,jdbcType=VARCHAR}
+    where userRecordId = #{userRecordId,jdbcType=VARCHAR}
+  </update>
+</mapper>
